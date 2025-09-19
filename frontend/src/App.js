@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Save, Edit, Trash2, BookOpen, Plus } from 'lucide-react';
 
-// Usar variable de entorno o fallback para desarrollo
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const DiarioPersonal = () => {
@@ -13,7 +12,6 @@ const DiarioPersonal = () => {
   const [mensaje, setMensaje] = useState('');
   const [conectado, setConectado] = useState(false);
 
-  // Obtener fecha actual en formato YYYY-MM-DD
   const obtenerFechaHoy = () => {
     const hoy = new Date();
     return hoy.toISOString().split('T')[0];
@@ -174,7 +172,6 @@ const DiarioPersonal = () => {
     cargarEntradaPorFecha(nuevaFecha);
   };
 
-  // Inicialización
   useEffect(() => {
     const inicializar = async () => {
       const conexionOk = await verificarConexion();
@@ -187,7 +184,6 @@ const DiarioPersonal = () => {
     inicializar();
   }, []);
 
-  // Cargar entrada cuando cambia la fecha
   useEffect(() => {
     if (fechaSeleccionada && conectado) {
       cargarEntradaPorFecha(fechaSeleccionada);
@@ -229,7 +225,7 @@ const DiarioPersonal = () => {
           </div>
           <p className="text-gray-600">Escribe tus pensamientos y recuerdos día a día</p>
           <div className="text-sm text-green-600 mt-2">
-            ✅ Conectado al servidor
+           Conectado al servidor
           </div>
         </header>
 

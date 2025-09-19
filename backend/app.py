@@ -9,7 +9,6 @@ import time
 app = Flask(__name__)
 CORS(app)
 
-# Configuración de MySQL usando variables de entorno
 app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost')
 app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'root')
 app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'password')
@@ -18,7 +17,6 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 
-# Función para esperar a que MySQL esté listo
 def wait_for_mysql():
     max_retries = 30
     retry_count = 0
@@ -28,14 +26,14 @@ def wait_for_mysql():
             cursor = mysql.connection.cursor()
             cursor.execute("SELECT 1")
             cursor.close()
-            print("✅ Conexión a MySQL establecida exitosamente")
+            print("Conexión a MySQL establecida exitosamente")
             return True
         except Exception as e:
             retry_count += 1
-            print(f"⏳ Esperando MySQL... intento {retry_count}/{max_retries}")
+            print(f"Esperando MySQL... intento {retry_count}/{max_retries}")
             time.sleep(2)
     
-    print("❌ Error: No se pudo conectar a MySQL después de varios intentos")
+    print("Error: No se pudo conectar a MySQL después de varios intentos")
     return False
 
 # Crear tabla si no existe
@@ -57,10 +55,10 @@ def init_db():
         """)
         mysql.connection.commit()
         cursor.close()
-        print("✅ Base de datos inicializada correctamente")
+        print("Base de datos inicializada correctamente")
         return True
     except Exception as e:
-        print(f"❌ Error al inicializar la base de datos: {e}")
+        print(f"Error al inicializar la base de datos: {e}")
         return False
 
 @app.route('/api/entradas', methods=['GET'])
@@ -172,7 +170,6 @@ def eliminar_entrada(fecha):
 @app.route('/api/health', methods=['GET'])
 def health_check():
     try:
-        # Verificar conexión a la base de datos
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT 1")
         cursor.close()
@@ -181,13 +178,12 @@ def health_check():
         return jsonify({'status': 'API funcionando', 'database': 'error', 'error': str(e)}), 503
 
 if __name__ == '__main__':
-    print("🚀 Iniciando aplicación...")
+    print("Iniciando aplicación...")
     
-    # Esperar e inicializar la base de datos
     with app.app_context():
         if init_db():
-            print("✅ Aplicación lista")
+            print("Aplicación lista")
         else:
-            print("❌ Error en la inicialización")
+            print("Error en la inicialización")
     
     app.run(debug=False, host='0.0.0.0', port=5000)
